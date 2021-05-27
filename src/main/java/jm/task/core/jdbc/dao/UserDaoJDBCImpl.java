@@ -3,33 +3,23 @@ package jm.task.core.jdbc.dao;
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.SQLSyntaxErrorException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
-
-    Statement statement;
-    Util util;
+    
+    Connection conn;
 
     public UserDaoJDBCImpl() throws SQLException {
-        util = Util.getInstance();
-        try {
-            statement = util.getConnection().createStatement();
-
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-
+        Util util = Util.getInstance();
+        conn = util.getConnection();
     }
 
     public void createUsersTable() {
         try {
-            statement.executeUpdate("CREATE TABLE users (id BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT, " +
-                    "name VARCHAR(40), lastName VARCHAR(40), age INT);");
+            Statement statement = conn.createStatement();
+            statement.executeUpdate("CREATE TABLE users (id BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT, name VARCHAR(40), lastName VARCHAR(40), age INT);");
         } catch (SQLSyntaxErrorException a) {
             System.out.println("Не удалось создать таблицу, таблица с таким именем уже существует");
         } catch (SQLException e){
@@ -39,6 +29,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void dropUsersTable() {
         try {
+            Statement statement = conn.createStatement();
             statement.executeUpdate("DROP TABLE users;");
         } catch (SQLSyntaxErrorException a) {
             System.out.println("Не успешно, таблицы с таким названием не найдено");
@@ -49,8 +40,16 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void saveUser(String name, String lastName, Integer age) {
         try {
-            statement.executeUpdate("INSERT INTO users ( name, lastName , age ) " +
-                    "VALUES ('"+ name + "', '"+lastName+"', '"+age+"');");
+            String sql = "INSERT INTO users ( name, lastName , age ) VALUES (?, ?, ?);";
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, lastName);
+            preparedStatement.setInt(3, age);
+
+            int rows = preparedStatement.executeUpdate();
+
+            System.out.printf("%d rows added", rows);
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -58,7 +57,14 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void removeUserById(long id) {
         try {
-            statement.executeUpdate("DELETE FROM users WHERE id='" + id +"';");
+            String sql = "DELETE FROM users WHERE id=?;";
+            PreparedStatement preparedStatement2 = conn.prepareStatement(sql);
+            preparedStatement2.setLong(1, id);
+
+            int rows2 = preparedStatement2.executeUpdate();
+
+            System.out.printf("%d rows added", rows2);
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -69,6 +75,7 @@ public class UserDaoJDBCImpl implements UserDao {
         List<User> list = new ArrayList<>();
 
         try {
+            Statement statement = conn.createStatement();
             ResultSet resultset = statement.executeQuery("SELECT * FROM users");
 
             while(resultset.next()) {
@@ -89,6 +96,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void cleanUsersTable() {
         try {
+            Statement statement = conn.createStatement();
             statement.executeUpdate("TRUNCATE TABLE users;");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
