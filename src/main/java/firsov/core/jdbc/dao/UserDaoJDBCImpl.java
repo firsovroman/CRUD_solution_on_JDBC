@@ -1,7 +1,7 @@
-package jm.task.core.jdbc.dao;
+package firsov.core.jdbc.dao;
 
-import jm.task.core.jdbc.model.User;
-import jm.task.core.jdbc.util.Util;
+import firsov.core.jdbc.model.User;
+import firsov.core.jdbc.util.Util;
 
 import java.sql.*;
 import java.util.ArrayList;

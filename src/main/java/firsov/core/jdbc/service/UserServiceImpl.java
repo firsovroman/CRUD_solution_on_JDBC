@@ -1,8 +1,8 @@
-package jm.task.core.jdbc.service;
+package firsov.core.jdbc.service;
 
-import jm.task.core.jdbc.dao.UserDao;
-import jm.task.core.jdbc.dao.UserDaoJDBCImpl;
-import jm.task.core.jdbc.model.User;
+import firsov.core.jdbc.dao.UserDao;
+import firsov.core.jdbc.dao.UserDaoJDBCImpl;
+import firsov.core.jdbc.model.User;
 
 import java.sql.SQLException;
 import java.util.List;

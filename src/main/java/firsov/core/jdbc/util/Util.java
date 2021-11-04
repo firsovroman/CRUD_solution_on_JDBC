@@ -1,4 +1,4 @@
-package jm.task.core.jdbc.util;
+package firsov.core.jdbc.util;
 
 import java.sql.*;
 
@@ -6,7 +6,7 @@ public class Util {  // Lazy Initialization
 
     private static Util INSTANCE;
 
-    private static final String URL = "jdbc:mysql://localhost:3306/sys";
+    private static final String URL = "jdbc:mysql://localhost:3306/mydbtest";
     private static final String LOGIN = "root";
     private static final String PASSWORD = "root";
     private Connection connection;
