@@ -1,4 +1,4 @@
-# project_1_1_3
+# CRUD_solution_on_JDBC
 In this project I have implemented a simple CRUD application in JDBC with use pattern DAO.
 
 
